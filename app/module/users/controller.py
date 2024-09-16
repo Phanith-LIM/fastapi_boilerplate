@@ -1,7 +1,6 @@
 from typing import List
 
 from fastapi import APIRouter, Depends, Request, HTTPException, status
-
 from app.core.guards.authentication import AuthGuard
 from app.core.guards.authorization import AuthorizeGuard
 from app.module.users.model import ResponseUser, UpdateUser, LoginUser, TokenModel, SignUpUser
@@ -14,9 +13,13 @@ router = APIRouter(
 )
 
 
-@router.get('', response_model=List[ResponseUser])
+@router.get('', response_model=List[ResponseUser], dependencies=[Depends(AuthGuard()), Depends(AuthorizeGuard([UserRoles.ADMIN]))])
 def get_users(user_service: UserService = Depends(UserService)) -> List[ResponseUser]:
     return user_service.get_users()
+
+@router.post("/admin", response_model=ResponseUser)
+def create_admin(user_service: UserService = Depends(UserService)):
+    return user_service.create_admin()
 
 
 @router.get("/me", dependencies=[Depends(AuthGuard())], response_model=ResponseUser)

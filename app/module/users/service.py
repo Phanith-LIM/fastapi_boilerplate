@@ -7,7 +7,7 @@ from fastapi import Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.core.database import get_db
 from app.module.users.entity import UserEntity
-from app.module.users.model import CreateUser, UpdateUser, LoginUser, TokenModel, ResponseUser, SignUpUser
+from app.module.users.model import UpdateUser, LoginUser, TokenModel, ResponseUser, SignUpUser,CreateAdmin
 
 load_dotenv()
 
@@ -75,3 +75,11 @@ class UserService:
         payload["jti"] = os.urandom(16).hex()
 
         return jwt.encode(payload, os.getenv("SECRET_KEY"), algorithm="HS256")
+
+    def create_admin(self):
+        user = CreateAdmin(username="admin", password="admin", roles=["Admin", "User"])
+        new_user = UserEntity(**user.model_dump())
+        self.db.add(new_user)
+        self.db.commit()
+        self.db.refresh(new_user)
+        return new_user

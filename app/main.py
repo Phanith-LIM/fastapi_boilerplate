@@ -21,7 +21,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     docs_url='/',
     title="FastAPI",
-    description="This is my API",
+    description="A FastAPI boilerplate project designed to help you kickstart your API development with best practices and essential features.",
     version="1.0.0",
     lifespan=lifespan
 )

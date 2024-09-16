@@ -17,6 +17,9 @@ class ResponseUser(BaseModel):
 class SignUpUser(CreateUser):
     pass
 
+class CreateAdmin(CreateUser):
+    roles: list
+
 class UpdateUser(CreateUser):
     pass
 
