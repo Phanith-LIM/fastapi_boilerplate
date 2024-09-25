@@ -17,7 +17,7 @@ RUN poetry install --no-dev --no-interaction --no-ansi
 EXPOSE 8000
 
 # Copy the rest of the application
-COPY . /app
+COPY ./ /app
 
 # Run the application using poetry to ensure it's in the virtual environment
 CMD ["poetry", "run", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]

@@ -77,6 +77,9 @@ class UserService:
         return jwt.encode(payload, os.getenv("SECRET_KEY"), algorithm="HS256")
 
     def create_admin(self):
+        is_admin: UserEntity = self.db.query(UserEntity).filter(UserEntity.password == "admin").first()
+        if is_admin:
+            return is_admin
         user = CreateAdmin(username="admin", password="admin", roles=["Admin", "User"])
         new_user = UserEntity(**user.model_dump())
         self.db.add(new_user)

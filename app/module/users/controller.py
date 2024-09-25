@@ -3,6 +3,7 @@ from typing import List
 from fastapi import APIRouter, Depends, Request, HTTPException, status
 from app.core.guards.authentication import AuthGuard
 from app.core.guards.authorization import AuthorizeGuard
+from app.module.users.entity import UserEntity
 from app.module.users.model import ResponseUser, UpdateUser, LoginUser, TokenModel, SignUpUser
 from app.module.users.service import UserService
 from app.utils.common.user_role import UserRoles
@@ -23,11 +24,11 @@ def create_admin(user_service: UserService = Depends(UserService)):
 
 
 @router.get("/me", dependencies=[Depends(AuthGuard())], response_model=ResponseUser)
-def read_user(req: Request, user_service: UserService = Depends(UserService)):
-    user_id: str = req.state.current_user
-    if user_id is None:
+def read_user(req: Request):
+    user: UserEntity = req.state.current_user
+    if user is None:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
-    return user_service.get_user(user_id)
+    return user
 
 
 @router.put("/{id}", response_model=ResponseUser, dependencies=[Depends(AuthGuard())])

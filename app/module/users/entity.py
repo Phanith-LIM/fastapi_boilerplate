@@ -16,6 +16,3 @@ class UserEntity(Base):
     updated_at = Column(DateTime, default=datetime.now(timezone.utc), onupdate=datetime.now(timezone.utc))
 
     books = relationship("BookEntity", back_populates='added_by')
-
-    def __repr__(self):
-        return f"<UserEntity(id={self.id}, username={self.username})>"
